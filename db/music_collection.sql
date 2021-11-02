@@ -23,3 +23,6 @@ VALUES ('Rihanna');
 INSERT INTO albums (title, genre, artist_id) 
 VALUES ('First Album','Pop',1);
 
+INSERT INTO albums (title, genre, artist_id) 
+VALUES ('Second Album','Classik',2);
+

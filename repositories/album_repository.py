@@ -20,11 +20,42 @@ def select_all():
         albums.append(album)
     return albums
 
-# def save(task):
-#     sql="INSERT INTO tasks (description, user_id, duration, completed) VALUES (%s,%s,%s,%s) RETURNING *"
-#     values=[task.description, task.user.id, task.duration, task.completed]
+def save(album):
+    sql="INSERT INTO albums (title, artist_id, genre) VALUES (%s,%s,%s) RETURNING *"
+    values=[album.title,album.artist.id, album.genre]
 
-#     results=run_sql(sql,values)
-#     id=results[0]["id"]
-#     task.id=id
-#     return task    
+    results=run_sql(sql,values)
+    id=results[0]["id"]
+    album.id=id
+    return album 
+
+def select(id):
+    task=None
+    sql="SELECT * FROM albums WHERE id=%s"
+    values=[id]
+    result=run_sql(sql, values)[0]
+
+    if result is not None:
+        artist=artist_repository.select(result["artist_id"])
+        album=Album(
+        result['title'], 
+        artist,
+        result['genre'], 
+        result['id']
+        )
+    return album   
+
+
+def delete_all():
+    sql="DELETE FROM albums"
+    run_sql(sql)       
+
+def delete(id):
+    sql="DELETE FROM albums WHERE id=%s"
+    values=[id]
+    run_sql(sql,values)  
+
+def update(album):
+    sql="UPDATE albums SET(title,artist_id,genre)=(%s,%s,%s) WHERE id=%s"
+    values=[album.title,album.artist.id, album.genre,album.id]
+    run_sql(sql,values)    
