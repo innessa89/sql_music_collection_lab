@@ -30,7 +30,7 @@ def save(album):
     return album 
 
 def select(id):
-    task=None
+    album=None
     sql="SELECT * FROM albums WHERE id=%s"
     values=[id]
     result=run_sql(sql, values)[0]
@@ -44,6 +44,22 @@ def select(id):
         result['id']
         )
     return album   
+
+def select_all_by_artist(artist):
+    albums=[]
+    sql="SELECT * FROM albums WHERE artist_id=%s"
+    values=[artist.id]
+    results=run_sql(sql, values)
+    for row in results:
+        artist=artist_repository.select(row["artist_id"])
+        album = Album(
+            row['title'],
+            artist,
+            row['genre'],
+            row['id'] 
+            )
+        albums.append(album)
+    return albums
 
 
 def delete_all():
